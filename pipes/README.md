@@ -33,7 +33,7 @@ This directory contains the following:
 
 2.  `pipe.c` (the `parent` process): 
 
-    `pipe.c` reads an input text file (e.g. `AANNA_KARENINA.txt` ) and passes it to 
+    `pipe.c` reads an input text file (e.g. `ANNA_KARENINA.txt` ) and passes it to 
     the chid process which, in turn, counts the frequency of each word. 
 
 3. The other `*.c` programs implement helper functions such as `getword()` that 

@@ -51,14 +51,18 @@ The following makefile should work:
 ```
 OPT_GCC = -std=c99 -Wall -Wextra
 
-# compiler options and libraries for Linux, Mac OS X
+# compiler options and libraries for Linux, Mac OS X or Solaris
 ifeq ($(OSTYPE),linux)
   OPT = -D_XOPEN_SOURCE=700
   LIB = -lrt
 endif
-ifeq ($(OSTYPE),darwin)    # Mac OS X
+ifeq ($(OSTYPE),darwin)	# Mac OS X
   OPT = 
   LIB = 
+endif
+ifeq ($(OSTYPE),solaris)
+  OPT = -D_XOPEN_SOURCE=600
+  LIB = -lrt
 endif
 
 all: cons prod
@@ -74,7 +78,8 @@ run: cons prod
 	./cons
 
 clean:
-    rm -f cons prod
+	rm -f cons prod *.*~ *~ *.o 
+
 ```
 ##### References
 + [stackoverflow](http://stackoverflow.com/questions/9923495/undefined-reference-shm-open-already-add-lrt-flag-here)
