@@ -1,17 +1,3 @@
-/**
- * Simple program demonstrating shared memory in POSIX systems.
- *
- * This is the consumer process
- *
- * Figure 3.18
- *
- * @author Gagne, Galvin, Silberschatz
- * Operating System Concepts - Ninth Edition
- * Copyright John Wiley & Sons - 2013
- *
- * modifications by dheller@cse.psu.edu, 31 Jan. 2014
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -27,7 +13,7 @@ void display(char *prog, char *bytes, int n);
 int main(void)
 {
   const char *name = "/shm-example";	// file name
-  const int SIZE = 4096;		// file size
+  const int SIZE = 4194304;		// file size
 
   int shm_fd;		// file descriptor, from shm_open()
   char *shm_base;	// base address, from mmap()
@@ -48,9 +34,33 @@ int main(void)
   }
 
   /* read from the mapped shared memory segment */
-  display("cons", shm_base, 64);	// first as bytes, then as a string
-  printf("%s", shm_base);
+  display("cons", shm_base, 64);	
+  //printf("%s", shm_base);
 
+  /* char *ptr; */
+  /* int sz = 1985015; */
+  /*  for (ptr = (char *) shm_base; ptr <= shm_base + sz; ptr++)  */
+  /*      putc(*ptr, stdout); */
+  /*  putc('\n', stdout); */
+
+   /*START EXPERIMENTING WITH pthreads HERE */
+   /* First, need a few files to store the results of mappers */
+  FILE *out1fp;
+   out1fp = fopen("out1.txt", "w");
+   char *ptr;
+   int sz = 120;
+   for (ptr = (char *) shm_base; ptr <= shm_base + sz; ptr++) 
+       putc(*ptr, out1fp);
+   putc('\n', out1fp);
+
+   FILE *out2fp;
+   out2fp = fopen("out2.txt", "w");
+   for (; ptr <= shm_base + 241; ptr++) 
+       putc(*ptr, out2fp);
+   putc('\n', out2fp); 
+
+
+   
   /* remove the mapped shared memory segment from the address space of the process */
   if (munmap(shm_base, SIZE) == -1) {
     printf("cons: Unmap failed: %s\n", strerror(errno));

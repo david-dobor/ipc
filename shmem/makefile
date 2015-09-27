@@ -1,7 +1,3 @@
-# the shared memory example from OSC 9e Sec. 3.5.1, Fig. 3.17, 3.18
-
-# this must use GNU Make ("make" on Linux and Mac OS X, "gmake" on Solaris)
-
 # compiler options -- C99 with warnings
 OPT_GCC = -std=c99 -Wall -Wextra
 
@@ -32,4 +28,4 @@ run: cons prod
 	./cons
 
 clean:
-	rm -f cons prod
+	rm -f cons prod *.*~ *~ *.o 
