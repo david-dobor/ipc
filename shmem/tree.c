@@ -29,7 +29,7 @@ void treeprint(struct tnode *p)
 {
     if (p != NULL) {
 	treeprint(p->left);
-	printf("%-17s : %d\n", p->word, p->count);
+	printf("%s %d\n", p->word, p->count);
 	treeprint(p->right);
     }
 }

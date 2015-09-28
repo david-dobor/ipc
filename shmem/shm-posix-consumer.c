@@ -10,10 +10,11 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define kMaxLineLength		200
+#define MAXLINE  120
 
-/* returns the length of the word read (includes whitespaces preceeding the word */
-// int ReadWord( char *);
+struct tnode *addtree(struct tnode *, char *);
+void treeprint (struct tnode *);
+
 
 /* read til the newline character */
 int ReadLine( char *line, char *cPtr );
@@ -50,61 +51,82 @@ int main(void)
 
     /* read from the mapped shared memory segment */
     display("cons", shm_base, 64);	
-    //printf("%s", shm_base);
-
 
     char *ptr;
     //int sz = 1985015;
     ptr = shm_base;
-    printf("The value of pointer is %d\n", (int)ptr);
 
-    printf("======== START WHILE =========\n\n");
+    printf("======== START PROCESSING SHARED MEMORY =========\n\n");
+    char line[MAXLINE + 1];  // room for MAXLINE chars + one NUL
+    struct tnode *root;
+    const char s[2] = " ";
+    char *token;
+    root = NULL;
     
-    char line[ kMaxLineLength+1 ];  // room for kMaxLineLength chars + one NUL
-    int n;
-    int i = 1;
-    while (i <= 10) {
-	n = ReadLine( line, ptr);
-	printf("The number of chars read in: %d\n", n );
-	printf("%s\n",line );
-	printf("The value of pointer is %d\n", (int)ptr);
-	//n = ReadLine( line, ptr);
-	printf("\n======== END ITERATION =========\n");
+    printf("ptr: %p \n",  ptr);
+    printf("shm_base: %p \n",  shm_base);
+    
+    printf("======== Process the First Set of Bytes =========\n\n");
+    
+    while (ptr < shm_base + 141) {
+	ReadLine(line, ptr);  
 	ptr += strlen(line) + 1;
-	i++;
+	printf("%s\t length: %lu\n",line, strlen(line));
+
+	token = strtok(line, s); 	/* get the first token */
+	                                /* walk through other tokens */
+	while( token != NULL )  
+	{ 
+	    //printf( " %s\n", token );
+	    root = addtree(root, token);
+	    token = strtok(NULL, s); 
+	} 
     }
-    
+    printf("============= Print I Part Frequencies ==============\n\n");
+    treeprint(root);
 
-    
-    
-    /* FILE *out2fp; */
-    /* out2fp = fopen("out2.txt", "w"); */
-    /* ptr = (char *) (shm_base + file_bytes); */
-    /* for (; ptr <= shm_base + 280; ptr++)  */
-    /* 	putc(*ptr, out2fp); */
-    /* //putc('\n', out2fp);  */
+    printf("\nptr now at position: %p \n\n", ptr);
 
+    root = NULL;
+    printf("======== Process the Next Set of Bytes =========\n\n");
+    while (ptr < shm_base + 281) {
+    	ReadLine(line, ptr);
+    	ptr += strlen(line) + 1;
+    	printf("%s\t length: %lu\n",line, strlen(line));
+	token = strtok(line, s); 	/* get the first token */
+	                                /* walk through other tokens */
+	while( token != NULL )  
+	{ 
+	    //printf( " %s\n", token );
+	    root = addtree(root, token);
+	    token = strtok(NULL, s); 
+	} 
+    }
+     printf("============= Print II Part Frequencies ==============\n\n");
+     treeprint(root);
+
+printf("\nptr now at position: %p \n", ptr);
 
    
-    /* remove the mapped shared memory segment from the address space of the process */
-    if (munmap(shm_base, SIZE) == -1) {
-	printf("cons: Unmap failed: %s\n", strerror(errno));
-	exit(1);
-    }
+/* remove the mapped shared memory segment from the address space of the process */
+if (munmap(shm_base, SIZE) == -1) {
+    printf("cons: Unmap failed: %s\n", strerror(errno));
+    exit(1);
+}
 
-    /* close the shared memory segment as if it was a file */
-    if (close(shm_fd) == -1) {
-	printf("cons: Close failed: %s\n", strerror(errno));
-	exit(1);
-    }
+/* close the shared memory segment as if it was a file */
+if (close(shm_fd) == -1) {
+    printf("cons: Close failed: %s\n", strerror(errno));
+    exit(1);
+}
 
-    /* remove the shared memory segment from the file system */
-    if (shm_unlink(name) == -1) {
-	printf("cons: Error removing %s: %s\n", name, strerror(errno));
-	exit(1);
-    }
+/* remove the shared memory segment from the file system */
+if (shm_unlink(name) == -1) {
+    printf("cons: Error removing %s: %s\n", name, strerror(errno));
+    exit(1);
+}
 
-    return 0;
+return 0;
 }
 
 void display(char *prog, char *bytes, int n)
@@ -125,7 +147,7 @@ int ReadLine( char *line, char *ptr )
     while (isspace(c = *ptr)) {ptr++; ++numCharsRead;}
     //if (c != EOF) *line++ = c;
 
-    while ( (c = *ptr) != EOF && c != '\n' && ++numCharsRead <= kMaxLineLength ) {
+    while ( (c = *ptr) != EOF && c != '\n' && ++numCharsRead <= MAXLINE ) {
 	//if (!isalpha(c)) { *line = '\0'; return numCharsRead;}
         *line++ = c;
 	//putchar(c);
