@@ -42,14 +42,20 @@ This directory contains the following:
    
 4. Various `*.txt` files in this directory can be used to test the programs. 
 
-#### A Quick Note on the Data Structure Used 
+#### Miscellanea
+
+* A quick note on the data structure used 
 
 We choose to place the words and their counts in a binary search tree, where the 
 keys are the words and the values are their counts; we maintain the keys in order.
  (Although this is not necessary: 
  a simple hash-table with its (expected) constant time `search insert` and `delete`
  operations would have sufficed.) 
-   
+
+* What constitutes a word
+ the `getword` function fetches the next word from the input text, where a word is
+ either a string of letters and digits beginning with a letter, or a single
+ non-white space character. 
    
 #### Compilation
 
