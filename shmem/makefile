@@ -1,7 +1,7 @@
 # compiler options -- C99 with warnings
 OPT_GCC = -std=c99 -Wall -Wextra
 
-# compiler options and libraries for Linux, Mac OS X or Solaris
+# compiler options and libraries for Linux, Mac OS X
 ifeq ($(OSTYPE),linux)
   OPT = -D_XOPEN_SOURCE=700
   LIB = -lrt

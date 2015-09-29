@@ -9,8 +9,8 @@
 #include <sys/types.h>
 #include <errno.h>
 
-
-#define FILE_NAME "tinyTale.txt"
+#define FILE_NAME "tale.txt"
+//#define FILE_NAME "tinyTale.txt"
 //#define FILE_NAME "ANNA_KARENINA.txt"
 
 void display(char *prog, char *bytes, int n);

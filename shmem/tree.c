@@ -24,27 +24,31 @@ struct tnode *addtree(struct tnode *p, char *w) {
 }
 
 
-/* treeprint(): in-order print of tree p */
+/* treeprint: in-order print of tree p */
 void treeprint(struct tnode *p)
 {
     if (p != NULL) {
 	treeprint(p->left);
-	printf("%s %d\n", p->word, p->count);
+	printf("%-17s : %d\n", p->word, p->count);
 	treeprint(p->right);
     }
 }
 
-/* treesave: save tree to a file */
-char * treestring(struct tnode *p)
+/* treesave: save the tree to a file */
+void treesave (struct tnode *p, FILE *fp)
 {
-    char *str = NULL;
+    char readbuf[80];
     if (p != NULL) {
-	treestring(p->left);
-	sprintf(str, "%s %d\n", p->word, p->count);
-	treestring(p->right);
+	treesave(p->left, fp);
+	sprintf(readbuf,"%s : %d\n", p->word, p->count);
+	fputs(readbuf, fp);
+	treesave(p->right, fp);
     }
-    return str;
 }
+
+
+
+
 /* talloc(): make a node */
 struct tnode *talloc(void)
 {

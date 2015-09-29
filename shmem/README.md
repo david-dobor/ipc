@@ -1,9 +1,10 @@
 ### Using *Shared Memory* to Pass the File Content 
 
-#### The Structure
+#### Preliminary Tests, Overall Structure
 
 We use the `POSIX` interface to share memory between processes.
-The two main programs in this part are:
+We initially test two main programs: the producer reads a textfile (e.g `tinyTale.txt`)
+and writes it to the shared memory segment, byte-by-byte. and the consumer that connects to the shared memory and manipulates these bytes somehow (e.g. simply outputs them to `stdout`).
 
 1. `shm-posix-producer.c` 
     + creates the shared memory segment using `shm_open()`.
@@ -16,20 +17,15 @@ The two main programs in this part are:
 
 We end both main programs by removing the mapped shared memory segment from each process' address space (and do other minor housekeeping tasks).
 
-#### Testing the programs
-1. We first use a small text file `tinyTale.txt` to test our design. The objective here 
-   is simple: 
-   * The producer reads the textfile and writes it to the shared memory segment, 
-      byte-by-byte.
-   * The consumer just outputs the file contents to the standard output.
-   
-2. We next split the text file into two (about equal) shared memory segment parts and
-   have two separate *threads* manipulate the two parts independently. Here we have 
+#### Splitting the Consumer Process into parts
+
+1. We split the text file into four (about equal) shared memory segment parts and
+   have four separate *threads* manipulate the parts independently. Here we have 
    each thread simply output its part of the text file a line at a time.
    
-3. Finally we repeat part 2 on a larger text file 
-   (`ANNA_KARENINA.txt`, size: `1985015 bytes`), this time splitting the task among 4
-   different processes. These are our **mappers** in the *map-reduce* context.
+3. We next repeat the same on a larger text file 
+   (`ANNA_KARENINA.txt`, size: `1985015 bytes`), again splitting the task among 4
+   different threads. These are our **mappers** in the *map-reduce* context.
 
 
 #### Compilation
@@ -49,9 +45,10 @@ gcc -std=c99 -o cons shm-posix-consumer.c
 
 The following makefile should work:
 ```
+# compiler options -- C99 with warnings
 OPT_GCC = -std=c99 -Wall -Wextra
 
-# compiler options and libraries for Linux, Mac OS X or Solaris
+# compiler options and libraries for Linux, Mac OS X
 ifeq ($(OSTYPE),linux)
   OPT = -D_XOPEN_SOURCE=700
   LIB = -lrt
@@ -68,7 +65,7 @@ endif
 all: cons prod
 
 cons: shm-posix-consumer.c
-	gcc $(OPT_GCC) $(OPT) -o cons shm-posix-consumer.c $(LIB)
+	gcc $(OPT_GCC) $(OPT) -o cons shm-posix-consumer.c tree.c $(LIB)
 
 prod: shm-posix-producer.c
 	gcc $(OPT_GCC) $(OPT) -o prod shm-posix-producer.c $(LIB)
