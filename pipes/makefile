@@ -2,11 +2,11 @@ CC=gcc
 CFLAGS=-I.
 OPT = -std=c99 -Wall -Wextra
 
-freq: freq.o tree.o getword.o
-	$(CC) $(OPT) -o freq freq.o tree.o getword.o -I.
+freq: freq.c tree.c getword.c
+	$(CC) $(OPT) -o freq freq.c tree.c getword.c $(CFLAGS)
 
 pipe: pipe.c
-	gcc $(OPT) -o pipe pipe.c $(LIB)
+	gcc $(OPT) -o pipe pipe.c $(CFLAGS)
 
 run: pipe freq
 	./pipe

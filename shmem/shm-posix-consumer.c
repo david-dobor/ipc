@@ -14,7 +14,7 @@
 
 struct tnode *addtree(struct tnode *, char *);
 void treeprint (struct tnode *);
-
+char *treestring(struct tnode *p);
 
 /* read til the newline character */
 int ReadLine( char *line, char *cPtr );
@@ -83,8 +83,10 @@ int main(void)
 	} 
     }
     printf("============= Print I Part Frequencies ==============\n\n");
-    treeprint(root);
-
+    char *str = NULL;
+    
+    str = treestring(root);
+    printf("%s\n", str);
     printf("\nptr now at position: %p \n\n", ptr);
 
     root = NULL;

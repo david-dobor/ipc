@@ -24,17 +24,35 @@ This directory contains the following:
     you               : 1
     ```
 
-    `freq` can also take a text file from standard input:
+    `freq` can also take a text file from standard input (e.g.
      ```
      $ ./freq < tinyTale.txt
      $ ./freq < ANNA_KARENINA.txt | head
-     ```
+     ```).
 
 
 2.  `pipe.c` (the `parent` process): 
 
     `pipe.c` reads an input text file (e.g. `ANNA_KARENINA.txt` ) and passes it to 
-    the chid process which, in turn, counts the frequency of each word. 
+    the chid process which, in turn, counts the frequency of each word. The logic of
+    this program is as follows (ignoring timing its execution and other details): 
+    
+    ```
+    FILE *infile, *pipe_fp;
+    char readbuf[80];
+
+    infile = fopen(FILE_NAME, "rt");
+    pipe_fp = popen("./freq", "w");
+    while(true) {
+	     fgets(readbuf, 80, infile);
+	     if(feof(infile)) break;
+	     fputs(readbuf, pipe_fp);
+    }
+
+    fclose(infile);
+    pclose(pipe_fp);
+
+    ```
 
 3. The other `*.c` programs implement helper functions such as `getword()` that 
    gets the next word from the text file, or `printtree()` that outputs the key-value
@@ -44,18 +62,20 @@ This directory contains the following:
 
 #### Miscellanea
 
-* A quick note on the data structure used 
+* *A quick note on the data structure used.* 
+  We choose to place the words and their counts in a binary search
+  tree, where the keys are the words and the values are their counts.
+  We find this convinient because, for example, an in-order traversal
+  of this tree will output the words and their counts in alphabetical
+  order. (This is not necessary, however. A simple hash-table with its 
+  (expected) constant time `search insert` and `delete` operations would 
+  do just fine.) 
 
-We choose to place the words and their counts in a binary search tree, where the 
-keys are the words and the values are their counts; we maintain the keys in order.
- (Although this is not necessary: 
- a simple hash-table with its (expected) constant time `search insert` and `delete`
- operations would have sufficed.) 
-
-* What constitutes a word
- the `getword` function fetches the next word from the input text, where a word is
- either a string of letters and digits beginning with a letter, or a single
- non-white space character. 
+* *What constitutes a word.*
+ In this part we also implement the `getword` function, which we re-use in
+ other parts. `getword` fetches the next word from the input text stream, 
+ where a word is either a string of letters and digits beginning with a letter, 
+ or a single non-white space character. 
    
 #### Compilation
 
@@ -68,10 +88,10 @@ CFLAGS=-I.
 OPT = -std=c99 -Wall -Wextra
 
 freq: freq.o tree.o getword.o
-    $(CC) $(OPT) -o freq freq.o tree.o getword.o -I.
+    $(CC) $(OPT) -o freq freq.o tree.o getword.o $(CFLAGS)
 
 pipe: pipe.c
-	gcc $(OPT) -o pipe pipe.c $(LIB)
+	gcc $(OPT) -o pipe pipe.c 
 
 run: pipe freq
 	./pipe

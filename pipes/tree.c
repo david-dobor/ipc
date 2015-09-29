@@ -24,7 +24,7 @@ struct tnode *addtree(struct tnode *p, char *w) {
 }
 
 
-/* treeprint(): in-order print of tree p */
+/* treeprint: in-order print of tree p */
 void treeprint(struct tnode *p)
 {
     if (p != NULL) {
@@ -33,6 +33,21 @@ void treeprint(struct tnode *p)
 	treeprint(p->right);
     }
 }
+
+/* treesave: save the tree to a file */
+void treesave (struct tnode *p, FILE *fp)
+{
+    char readbuf[80];
+    if (p != NULL) {
+	treesave(p->left, fp);
+	sprintf(readbuf,"%s : %d\n", p->word, p->count);
+	fputs(readbuf, fp);
+	treesave(p->right, fp);
+    }
+}
+
+
+
 
 /* talloc(): make a node */
 struct tnode *talloc(void)

@@ -1,3 +1,6 @@
+## ignore all directories called test
+test/
+
 # Object files
 *.o
 *.ko

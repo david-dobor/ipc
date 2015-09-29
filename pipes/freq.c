@@ -7,11 +7,15 @@
 #define MAXWORD 150
 struct tnode *addtree(struct tnode *, char *);
 void treeprint (struct tnode *);
+void treesave (struct tnode *p, FILE *fp);
 int getword(char *, int); 
 
 int main() {
     struct tnode *root;
     char word[MAXWORD];
+
+    FILE *temp;
+    temp = fopen("temp.out", "w");
 
     char *p;
 
@@ -23,6 +27,7 @@ int main() {
 	    root = addtree(root, word);
 	}
     treeprint(root);
+    treesave(root, temp);
     return 0;
 }
 

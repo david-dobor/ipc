@@ -34,6 +34,17 @@ void treeprint(struct tnode *p)
     }
 }
 
+/* treesave: save tree to a file */
+char * treestring(struct tnode *p)
+{
+    char *str = NULL;
+    if (p != NULL) {
+	treestring(p->left);
+	sprintf(str, "%s %d\n", p->word, p->count);
+	treestring(p->right);
+    }
+    return str;
+}
 /* talloc(): make a node */
 struct tnode *talloc(void)
 {
