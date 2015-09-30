@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "tnode.h"
 
 struct tnode *talloc(void);
@@ -65,3 +66,25 @@ struct tnode *talloc(void)
 /* 	strcpy(p, s); */
 /*     return p; */
 /* } */
+
+int getword(char *word, int lim, FILE *fp)
+{
+    int c;    //, getch(void);
+    //void ungetch(int);
+    char *w = word;
+    while (isspace(c = getc(fp)))
+	;
+    if (c != EOF)
+	*w++ = c;
+    if (!isalpha(c)) {
+	*w= '\0';
+	return c;
+    }
+    for( ; --lim > 0; w++)
+	if(!isalnum( *w = getc(fp))) {
+	    ungetc(*w, fp);
+	    break;
+	}
+    *w = '\0';
+    return word[0];
+}

@@ -8,7 +8,7 @@
 struct tnode *addtree(struct tnode *, char *);
 void treeprint (struct tnode *);
 void treesave (struct tnode *p, FILE *fp);
-int getword(char *, int); 
+int getword(char *, int, FILE *); 
 
 int main() {
     struct tnode *root;
@@ -20,7 +20,7 @@ int main() {
     char *p;
 
     root = NULL;
-    while (getword(word, MAXWORD) != EOF)
+    while (getword(word, MAXWORD, stdin) != EOF)
 	if (isalpha(word[0])) {
 	    for( p = word; *p != '\0'; p++)
 		*p = tolower(*p);
