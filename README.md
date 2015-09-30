@@ -1,7 +1,7 @@
 ### Linux Interprocess Communications
 
-This project consists of three parts, and each part explors a single method ( of many ) 
-in which processes on a Linux system can communicate. In each part, the same task is
+This project consists of three parts. Each part explores a single method (of many) 
+in which processes on a Linux system can communicate. In each part the same task is
 performed:
 given a text file, output a list showing the count of each unique word 
 (case insensitive). In each part, the `parent` process creates
@@ -43,11 +43,13 @@ text file.
 **Hadoop** is a popular software framework for storing massive amounts of data and 
 for fast concurrent processing that data. Among the many reasons for Hadoop’s popularity
 are its open source nature, its massive storage capability, and its enormous 
-processing power. Hadoop also offers advantages over traditional databases that require preprocessing of data before storing it; Hadoop users can store virtually limitless amounts of any kind of data and then decide how to use it later. 
-An increase in demand for fast processing of any kind of data - especially from social media, the internet of things, the financial industry - coupled with Hadoop’s ability 
+processing power. Hadoop also offers advantages over traditional databases that require
+preprocessing of data before storing it; Hadoop users can store virtually limitless
+amounts of any kind of data and then decide how to use it later. 
+An increase in demand for fast processing of any kind of data - especially from social
+media, the internet of things, the financial industry - coupled with Hadoop’s ability 
 to store *any* kind of data, and *process it in parallel*, quickly, using clusters of
-low-cost computers, is sure to contribute to Hadoop’s popularity in the  
-future as well. 
+low-cost computers, is sure to contribute to Hadoop’s popularity in the future as well. 
 
 
 
