@@ -11,21 +11,19 @@
 #include <ctype.h>
 
 #define FILESIZE 1985020   	/* number of bytes in a file */
-#define WORDCOUNT 430		/* number of `words` in a file */
+#define MAXWORD 30		/* number of `words` in a file */
 struct tnode *addtree(struct tnode *, char *);
 void treeprint (struct tnode *);
 void treesave (struct tnode *p, FILE *fp);
-
-
-/* read til the newline character */
-int ReadLine( char *line, char *cPtr );
-
+int getword(char *word, int lim, FILE *fp);
 
 /* this just displays the byte content (in hex). just used in testing  */
 void display(char *prog, char *bytes, int n);
 
-/*getline: readaline, return length */
-//int getline(char *line, int max, FILE *fp);
+/* mapper: generate the word frequencies from input file 
+*  and store it in the output file */
+void mapper (FILE *infp, FILE *freqfp);
+//FILE *outfp mapper (FILE *infp);
 
 int main(void)
 {
@@ -67,61 +65,37 @@ int main(void)
     printf("===================================\n");
     printf("===================================\n");
 
-    //for (ptr = (char *) shm_base; ptr <= shm_base+sz; ptr++) 
-	;
+    //display("cons", shm_base, 64);	// first as bytes, then as a string
+    //printf("%s", shm_base);
 
-	FILE * stream;
-	stream = fdopen(shm_fd, "r");
-	int c;
-	while ((c = fgetc (stream)) != EOF)
-	    putchar (c);
-	fclose (stream);
+    /* Create the first set of bytes to manipulate */
+    FILE *out1 =  fopen("OUT1", "w");
+    for (int i = 0; i < 400; i++) 
+    { //fprintf(out1, "%02x%c", shm_base[i], ((i+1)%16) ? ' ' : '\n');
+	fprintf(out1, "%c", shm_base[i]);}
+    //fprintf(out1, '\n');
+    fclose(out1);
+
+    /* Map the first set of bytes */
+    out1 = fopen("OUT1", "r"); FILE *freqp1 = fopen("FREQ1", "w");
+    mapper (out1, freqp1);
+    fclose(out1); fclose(freqp1);
 
 
-/*     char bigString[FILESIZE]; */
-/*     sprintf(bigString, "%s", shm_base); */
-/*     printf("%s", bigString); */
-
-/*     /\* Start tokenizing the big string and print out the tokens *\/ */
-/*     /\* Also, save em in a tree *\/ */
-/*     struct tnode *root; */
-/*     root = NULL; */
-/*     FILE *temp; */
+    /* Create the second set of bytes to manipulate */
+    FILE *out2 =  fopen("OUT2", "w");    
+    for (int i = 401; i < 800; i++)
+    { //fprintf(out2, "%02x%c", shm_base[i], ((i+1)%16) ? ' ' : '\n');
+	fprintf(out2, "%c", shm_base[i]);}
+    //fprintf(out2, "\n");
+    fclose(out2);
     
+    /* Map the first set of bytes */
+    out1 = fopen("OUT2", "r"); FILE *freqp2 = fopen("FREQ2", "w");
+    mapper (out2, freqp2);
+    fclose(out2); fclose(freqp2);
 
-
-/*     const char s[2] = " "; */
-/*     char *token; */
     
-/*     /\* get the first token *\/ */
-/*     token = strtok(bigString, s); */
-/* //    root = addtree(root, "David!!!"); */
-/*     root = addtree(root, token); */
-    //treeprint(root);
-    
-    /* for(int i = 1; i <= WORDCOUNT; i++) { */
-    /* 	token = strtok(NULL, s); */
-    /* 	printf( "%s\n", token ); */
-    /*     addtree(root, token); */
-    /* } */
-    /* treeprint(root); */
-    /* temp = fopen("temp.out", "w"); */
-    /* treesave(root, temp); */
-    /* fclose(temp); */
-    
-    /* walk through other tokens */
-
-    /* char *p = token; */
-    /* while( token != NULL )  */
-    /* { */
-    /* 	token = strtok(NULL, s); */
-    /* 	//printf( "%s\n", token ); */
-    /* 	//p = token; */
-    /* } */
-    /* //treeprint(root); */
-
-    //printf("\nptr now at position: %p \n", ptr);
-
    
 /* remove the mapped shared memory segment from the address space of the process */
     if (munmap(shm_base, SIZE) == -1) {
@@ -143,6 +117,25 @@ int main(void)
 
     return 0;
 }
+
+void mapper (FILE *infp, FILE *freqfp)
+{
+    struct tnode *root;
+    char word[30];
+
+    char *p;
+    root = NULL;
+    while (getword(word, 30, infp) != EOF)
+	if (isalpha(word[0])) {
+	    for( p = word; *p != '\0'; p++)
+		*p = tolower(*p);
+	    root = addtree(root, word);
+	}
+    treeprint(root);
+    treesave(root, freqfp);
+    //fclose(freqfp);
+}
+
 
 void display(char *prog, char *bytes, int n)
 {

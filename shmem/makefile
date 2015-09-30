@@ -29,3 +29,4 @@ run: cons prod
 
 clean:
 	rm -f cons prod *.*~ *~ *.o 
+	rm -rf *.dSYM
