@@ -35,7 +35,7 @@ several mappers working in *parallel* to produce this output of tuples.
 The Reduce job then takes the output of the mappers and combines them to
 produce a smaller output of its own. This output is also a set of key/value pairs. 
 An example of this is the third part of the project where 4 mappers processed 
-a quarter of a large text file. Each mapper output the words found in its chunk of the 
+a quarter of a large text file. Each mapper outputs the words found in its chunk of the 
 text, together with the frequencies with which these word occurred. The reducer then
 combined these results to produce the frequencies of unique words in the original
 text file.
@@ -46,10 +46,11 @@ are its open source nature, its massive storage capability, and its enormous
 processing power. Hadoop also offers advantages over traditional databases that require
 preprocessing of data before storing it; Hadoop users can store virtually limitless
 amounts of any kind of data and then decide how to use it later. 
-An increase in demand for fast processing of any kind of data - especially from social
-media, the internet of things, the financial industry - coupled with Hadoop’s ability 
-to store *any* kind of data, and *process it in parallel*, quickly, using clusters of
-low-cost computers, is sure to contribute to Hadoop’s popularity in the future as well. 
+An increase in demand for fast processing of various types of data - especially from
+socialmedia, the internet of things, or the financial industry - coupled with Hadoop’s
+ability to store *any* kind of data, and *process it in parallel*, quickly, using 
+clusters oflow-cost computers, is sure to contribute to Hadoop’s popularity in the 
+future as well. 
 
 
 
