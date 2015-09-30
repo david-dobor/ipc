@@ -70,27 +70,33 @@ int main(void)
     //for (ptr = (char *) shm_base; ptr <= shm_base+sz; ptr++) 
 	;
 
+	FILE * stream;
+	stream = fdopen(shm_fd, "r");
+	int c;
+	while ((c = fgetc (stream)) != EOF)
+	    putchar (c);
+	fclose (stream);
 
 
-    char bigString[FILESIZE];
-    sprintf(bigString, "%s", shm_base);
-    printf("%s", bigString);
+/*     char bigString[FILESIZE]; */
+/*     sprintf(bigString, "%s", shm_base); */
+/*     printf("%s", bigString); */
 
-    /* Start tokenizing the big string and print out the tokens */
-    /* Also, save em in a tree */
-    struct tnode *root;
-    root = NULL;
-    FILE *temp;
+/*     /\* Start tokenizing the big string and print out the tokens *\/ */
+/*     /\* Also, save em in a tree *\/ */
+/*     struct tnode *root; */
+/*     root = NULL; */
+/*     FILE *temp; */
     
 
 
-    const char s[2] = " ";
-    char *token;
+/*     const char s[2] = " "; */
+/*     char *token; */
     
-    /* get the first token */
-    token = strtok(bigString, s);
-//    root = addtree(root, "David!!!");
-    root = addtree(root, token);
+/*     /\* get the first token *\/ */
+/*     token = strtok(bigString, s); */
+/* //    root = addtree(root, "David!!!"); */
+/*     root = addtree(root, token); */
     //treeprint(root);
     
     /* for(int i = 1; i <= WORDCOUNT; i++) { */

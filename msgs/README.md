@@ -1,13 +1,17 @@
 ### Using *Message Queue*s to Pass the File Content 
 
-**//TO DO** This part should be relatively straightforward - **Do This Last**
+`parent.c`:
 
-+ Process 1 will create and connect to the queue using `msgget(key_t key, int msgflg)`
++ `parent.c` creates the queue and connects to the queue using `msgget(key_t key, int msgflg)`
 
-+ Process 1 will start sending *fixed length* messages to the queue using `msgsnd()`.
++ `parent.c` starts sending *fixed length* messages to the queue using `msgsnd()`.
 
-+ Process 2 will connect to the queue and start receiving messages using `msgrcv()`
+`child.c`
 
++ `child.c` connects to the queue and starts receiving messages using `msgrcv()`
++ `child.c` then processes the messages as before, counting the word frequencies.
+
+Additional details can be found in the code comments.
 
 ##### References
 

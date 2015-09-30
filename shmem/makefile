@@ -1,5 +1,5 @@
 # compiler options -- C99 with warnings
-OPT_GCC = -std=c99 -Wall -Wextra
+OPT_GCC = -std=c99 -Wall -Wextra -g
 
 # compiler options and libraries for Linux, Mac OS X
 ifeq ($(OSTYPE),linux)
