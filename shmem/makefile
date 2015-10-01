@@ -4,7 +4,7 @@ OPT_GCC = -std=c99 -Wall -Wextra -g
 # compiler options and libraries for Linux, Mac OS X
 ifeq ($(OSTYPE),linux)
   OPT = -D_XOPEN_SOURCE=700
-  LIB = -lrt
+  LIB = -lrt -pthread
 endif
 ifeq ($(OSTYPE),darwin)	# Mac OS X
   OPT = 

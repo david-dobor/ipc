@@ -32,7 +32,7 @@ void mapper (FILE *infp, FILE *freqfp);
 //FILE *outfp mapper (FILE *infp);
 
 
-/* a mapper that threads will like */
+/* a mapper that pthreads will like */
 void* mapper_t(void * param);
 
 
@@ -142,17 +142,18 @@ void mapper (FILE *infp, FILE *freqfp)
 
 void* mapper_t(void *param)
 {
-    struct tnode *root;
-    char word[30];
-
-    char *p;
-    root = NULL;
-
-    char *shm_base = (char *) param;
-
+    long *base = (long *) param;
+    char *shm_base = (char *) base; 
     long thread_no = (long) param;
-    if (thread_no == 0) {
 
+    
+    if (thread_no == 0) {
+	struct tnode *root;
+	char word[30];
+	char *p;
+	root = NULL;
+
+	
 	/* Create the first set of bytes to manipulate */
 	FILE *out1 =  fopen("OUT1", "w");
 	for (int i = 0; i < 400; i++) 
