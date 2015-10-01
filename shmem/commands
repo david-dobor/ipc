@@ -1,5 +1,7 @@
 
 
+gcc -std=c99 -Wall -Wextra -g -o child child.c tree.c
 gcc -std=c99 -Wall -Wextra -g -o cons shm-posix-consumer.c tree.c
 
+gcc -std=c99 -Wall -Wextra -g -o parent parent.c
 gcc -std=c99 -Wall -Wextra -g -o prod shm-posix-producer.c
